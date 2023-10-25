@@ -1,0 +1,51 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<style>
+    .container {
+        text-align: center;
+        margin-top: 100px;
+    }
+
+    .heading {
+        font-size: 36px;
+        margin-top: 20px;
+        color: #007BFF;
+    }
+
+    .lead {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    .start-button {
+        font-size: 20px;
+        padding: 10px 20px;
+        margin-top: 30px;
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .start-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container">
+    <h1 class="heading">Welcome to Your CRUD Application</h1>
+    <p class="lead">Manage employee data with ease.</p>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <p class="text-muted">Get started by clicking on the button below:</p>
+            <a class="start-button" href="employeeoverview">View Employees</a>
+        </div>
+    </div>
+</div>

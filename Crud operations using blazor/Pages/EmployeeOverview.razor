@@ -1,0 +1,63 @@
+﻿@page "/employeeoverview"
+
+@if (Employees != null && Employees.Any())
+{
+    <div class="container mt-5">
+        <h3 class="mb-4">Employee Overview</h3>
+
+        <NavLink href="createemployee" class="btn btn-primary create-employee-button mb-2">Create Employee</NavLink>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th> <!-- Add a column for serial number -->
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone Number</th>
+                        <th>Gender</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var (employee, index) in Employees.Select((e, i) => (e, i)))
+                    {
+                        <tr>
+                            <td>@(index + 1)</td> <!-- Display the serial number -->
+                            <td>@employee.FirstName</td>
+                            <td>@employee.LastName</td>
+                            <td>@employee.Email</td>
+                            <td>@employee.PhoneNumber</td>
+                            <td>@employee.Gender.ToString()</td>
+                            <td>
+                                <NavLink href="@($"employeedetails/{employee.Id}")" class="btn btn-success btn-sm mx-1">Details</NavLink>
+                                <NavLink href="@($"updateEmployee/{employee.Id}")" class="btn btn-secondary btn-sm mx-1">Update</NavLink>
+                                <NavLink href="@($"deleteEmployee/{employee.Id}")" class="btn btn-danger btn-sm mx-1">Delete</NavLink>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container text-center mt-5">
+        <h2>Sorry, No Employees Found</h2>
+        <NavLink href="createemployee" class="btn btn-primary create-employee-button">Create Employee</NavLink>
+    </div>
+}
+@code {
+
+    IEnumerable<Employee> Employees;
+
+    [Inject]
+    public IEmployeeDataService employeeDataService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Employees = await employeeDataService.GetAllEmployees();
+    }
+}

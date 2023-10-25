@@ -1,0 +1,92 @@
+﻿@page "/employeedetails/{EmployeeId:int}"
+<h3>Employee Details of @CurrentEmployee?.FirstName @CurrentEmployee?.LastName</h3>
+
+<div class="employee-details">
+    @if (CurrentEmployee != null)
+    {
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Employee Information</h5>
+                <dl class="row">
+             
+
+                    <dt class="col-sm-3">First Name:</dt>
+                    <dd class="col-sm-9">@CurrentEmployee?.FirstName</dd>
+
+                    <dt class="col-sm-3">Last Name:</dt>
+                    <dd class="col-sm-9">@CurrentEmployee?.LastName</dd>
+
+
+                        
+                    <dt class="col-sm-3">Email:</dt>
+                    <dd class="col-sm-9">@CurrentEmployee?.Email</dd>
+
+                    <dt class="col-sm-3">Phone Number:</dt>
+                    <dd class="col-sm-9">@CurrentEmployee?.PhoneNumber</dd>
+
+       
+
+
+                    <dt class="col-sm-3">Gender:</dt>
+                    <dd class="col-sm-9">@CurrentEmployee?.Gender</dd>
+
+           
+
+
+                 
+
+                </dl>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>No employee found with ID @EmployeeId.</p>
+    }
+</div>
+@code{
+    [Parameter]
+    public int EmployeeId { get; set; }
+
+    private Employee CurrentEmployee { get; set; }
+
+    [Inject]
+    public IEmployeeDataService EmployeeDataService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentEmployee = await EmployeeDataService.GetEmployeeById(EmployeeId);
+    }
+}
+<style>
+    .employee-details {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .card {
+        width: 100%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+    }
+
+    dt {
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    dd {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+

@@ -1,0 +1,71 @@
+﻿@page "/updateEmployee/{id:int}"
+@inject IEmployeeDataService employeeDataService
+@inject NavigationManager Navigation
+
+<h3>Update Employee : @employee?.FirstName @employee?.LastName </h3>
+
+@if (employee == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="container">
+        <form class="form">
+            <div class="form-group">
+                <label for="FirstName">First Name:</label>
+                <input class="form-control" type="text" id="FirstName" @bind="employee.FirstName" />
+            </div>
+            <div class="form-group">
+                <label for="LastName">Last Name:</label>
+                <input class="form-control" type="text" id="LastName" @bind="employee.LastName" />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email:</label>
+                <input class="form-control" type="email" id="Email" @bind="employee.Email" />
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber">Phone Number:</label>
+                <input class="form-control" type="tel" id="PhoneNumber" @bind="employee.PhoneNumber" />
+            </div>
+            <div class="form-group">
+                <label for="Gender">Gender:</label>
+                <select class="form-control" id="Gender" @bind="employee.Gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <button class="btn btn-primary mt-2" @onclick="UpdateEmployee">Update Employee</button>
+        </form>
+        <p class="text-success">@message</p>
+    </div>
+}
+
+@code {
+    public Employee employee;
+    public string message = "";
+
+    [Parameter]
+    public int id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        employee = await employeeDataService.GetEmployeeById(id);
+    }
+
+    private async Task UpdateEmployee()
+    {
+        try
+        {
+            await employeeDataService.UpdateEmployee(employee);
+
+            Navigation.NavigateTo("/employeeOverview");
+        }
+        catch (Exception ex)
+        {
+
+            message = "Error: " + ex.Message;
+        }
+    }
+}

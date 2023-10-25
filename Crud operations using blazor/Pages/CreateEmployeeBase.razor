@@ -1,0 +1,99 @@
+﻿@page "/createEmployee"
+@inject NavigationManager Navigation
+<h3>Create Employee</h3>
+<div class="container">
+    <form class="form">
+        <div class="form-group">
+            <label for="FirstName">First Name:</label>
+            <input class="form-control" type="text" id="FirstName" @bind="newEmployee.FirstName" />
+        </div>
+        <div class="form-group">
+            <label for="LastName">Last Name:</label>
+            <input class="form-control" type="text" id="LastName" @bind="newEmployee.LastName" />
+        </div>
+      
+        <div class="form-group">
+            <label for="Email">Email:</label>
+            <input class="form-control" type="email" id="Email" @bind="newEmployee.Email" />
+        </div>
+        <div class="form-group">
+            <label for="PhoneNumber">Phone Number:</label>
+            <input class="form-control" type="tel" id="PhoneNumber" @bind="newEmployee.PhoneNumber" />
+        </div>
+        <div class="form-group">
+            <label for="Gender">Gender:</label>
+            <select class="form-control" id="Gender" @bind="newEmployee.Gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <button class="btn btn-primary" @onclick="CreateEmployee" disabled="@isCreating">Create Employee</button>
+    </form>
+    <p class="text-success">@message</p>
+</div>
+
+@code {
+    private Employee newEmployee = new Employee();
+    private string message = "";
+    private bool isCreating = false;
+
+    [Inject]
+    private IEmployeeDataService employeeDataService { get; set; }
+
+    private async Task CreateEmployee()
+    {
+        isCreating = true;
+        message = "";
+
+        try
+        {
+            await employeeDataService.CreateEmployee(newEmployee);
+            newEmployee = new Employee();
+
+            Navigation.NavigateTo("/employeeOverview");
+        }
+        catch (Exception ex)
+        {
+            message = "Error: " + ex.Message;
+        }
+
+        isCreating = false;
+    }
+}
+<style>
+    .create-employee-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .message {
+        margin-top: 15px;
+        color: #007bff;
+    }
+
+</style>
